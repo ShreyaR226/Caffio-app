@@ -9,29 +9,36 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
  const navigation = useNavigation();
+
 const handleLogin = async () => {
   try {
-    const res = await API.post("/authRoutes/login", {
+   console.log("clicked button")
+    let endpoint = "/authRoutes/login";
+
+    if (role === "staff") {
+      endpoint = "/authRoutes/loginStaff";
+    }
+
+    const res = await API.post(endpoint, {
       email,
       password,
       role
     });
 
     const token = res.data.token;
-    const roleFromBackend = res.data.role; 
-    await AsyncStorage.setItem("token", token);
-    // await AsyncStorage.setItem("role", role);
-    await AsyncStorage.setItem("role", roleFromBackend);
-    if (roleFromBackend === "customer") {
-    navigation.replace("CustomerHome");
-    } else if (roleFromBackend === "staff") {
-    navigation.replace("StaffHome");
-    }
-    console.log("Saved token");
-    
-    
+    const roleFromBackend = res.data.role;
 
-    
+    await AsyncStorage.setItem("token", token);
+    await AsyncStorage.setItem("role", roleFromBackend);
+
+    if (roleFromBackend === "customer") {
+      navigation.replace("CustomerHome");
+    } else if (roleFromBackend === "staff") {
+      navigation.replace("StaffHome");
+    }
+
+    console.log("Saved token");
+
   } catch (err) {
     console.log("ERROR:", err.response?.data || err.message);
   }
