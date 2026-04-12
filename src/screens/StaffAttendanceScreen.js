@@ -142,7 +142,7 @@ export default function StaffAttendanceScreen() {
             elevation: 4
           }}
         >
-          <Text style={{ fontSize: 16 }}>This Month</Text>
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Current Month</Text>
 
           <Text
             style={{

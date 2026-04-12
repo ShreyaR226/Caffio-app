@@ -4,10 +4,13 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  ImageBackground,
+  SafeAreaView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import API from "../services/api";
+import bgImage from "../../assets/image.png";
 
 export default function StaffHomeScreen() {
   const [orders, setOrders] = useState([]);
@@ -62,19 +65,19 @@ export default function StaffHomeScreen() {
   ).length;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
 
-      <Text style={styles.welcome}>hello staff </Text>
+      <Text style={styles.welcome}>What's Brewing Today? ☕</Text>
 
       <View style={styles.summaryRow}>
         <View style={styles.summaryCard}>
           <Text style={styles.summaryNumber}>{orders.length}</Text>
-          <Text>Orders Assigned</Text>
+          <Text style={styles.summaryLabel}>Orders Assigned</Text>
         </View>
 
         <View style={styles.summaryCard}>
           <Text style={styles.summaryNumber}>{completedOrders}</Text>
-          <Text>Orders Completed</Text>
+          <Text style={styles.summaryLabel}>Orders Completed</Text>
         </View>
       </View>
 
@@ -84,23 +87,31 @@ export default function StaffHomeScreen() {
         renderItem={({ item }) => (
           <View style={styles.card}>
 
-            <View style={styles.cardHeader}>
+            <ImageBackground
+              source={bgImage}
+              style={styles.cardHeader}
+              imageStyle={styles.headerImage}
+            >
               <Text style={styles.orderTitle}>
                 Order #{item._id.slice(-4)}
               </Text>
-            </View>
+            </ImageBackground>
 
             <View style={styles.cardBody}>
 
               {item.items.map((menu, index) => (
-                <Text key={index} style={styles.itemText}>
-                  {menu.quantity} x {menu.menuItem?.name}
-                </Text>
+                <View key={index} style={styles.itemBox}>
+                  <Text style={styles.itemText}>
+                    {menu.quantity} x {menu.menuItem?.name}
+                  </Text>
+                </View>
               ))}
 
-              <Text style={styles.statusText}>
-                Status: {item.status}
-              </Text>
+              <View style={styles.statusBox}>
+                <Text style={styles.statusText}>
+                  Status: {item.status}
+                </Text>
+              </View>
 
               {item.status === "Assigned" && (
                 <TouchableOpacity
@@ -147,16 +158,17 @@ export default function StaffHomeScreen() {
         )}
       />
 
-    </View>
+   </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F7F1E8",
-    padding: 15
-  },
+ container: {
+  flex: 1,
+  backgroundColor: "#F7F1E8",
+  padding: 15,
+  paddingTop: 20
+},
 
   welcome: {
     fontSize: 26,
@@ -177,13 +189,23 @@ const styles = StyleSheet.create({
     width: "48%",
     padding: 15,
     borderRadius: 15,
-    elevation: 4
+    elevation: 4,
+    alignItems: "center",
+    justifyContent: "center"
   },
 
   summaryNumber: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#A67B5B"
+    color: "#A67B5B",
+    textAlign: "center"
+  },
+
+  summaryLabel: {
+    textAlign: "center",
+    fontWeight: "600",
+    color: "#4B2E2B",
+    marginTop: 5
   },
 
   card: {
@@ -195,28 +217,56 @@ const styles = StyleSheet.create({
   },
 
   cardHeader: {
-    backgroundColor: "#A67B5B",
-    padding: 15
+    padding: 15,
+    justifyContent: "center"
+  },
+
+  headerImage: {
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18
   },
 
   orderTitle: {
     color: "#fff",
     fontSize: 20,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    alignSelf: "flex-start"
   },
 
   cardBody: {
     padding: 15
   },
 
-  itemText: {
-    fontSize: 16,
+  itemBox: {
+    backgroundColor: "#F3E9DC",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 10,
     marginBottom: 8
   },
 
-  statusText: {
+  itemText: {
+    fontSize: 16,
+    color: "#4B2E2B",
+    fontWeight: "600"
+  },
+
+  statusBox: {
+    backgroundColor: "#E8D8C3",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 10,
     marginBottom: 12,
-    color: "#6F4E37"
+    marginTop: 5
+  },
+
+  statusText: {
+    color: "#6F4E37",
+    fontWeight: "bold",
+    fontSize: 15
   },
 
   prepareBtn: {
@@ -240,12 +290,14 @@ const styles = StyleSheet.create({
   btnText: {
     color: "#fff",
     textAlign: "center",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontSize: 15
   },
 
   completedText: {
     color: "green",
     textAlign: "center",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontSize: 15
   }
 });

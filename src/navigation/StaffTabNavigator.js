@@ -11,20 +11,15 @@ export default function StaffTabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        headerStyle: {
-          backgroundColor: "#F5EFE6"
-        },
-        headerTitleStyle: {
-          fontWeight: "bold",
-          fontSize: 22,
-          color: "#6F4E37"
-        },
+        headerShown: false,
+
         tabBarStyle: {
           backgroundColor: "#ffffff",
           height: 65,
           borderTopWidth: 0,
           elevation: 8
         },
+
         tabBarActiveTintColor: "#6F4E37",
         tabBarInactiveTintColor: "#999",
 
